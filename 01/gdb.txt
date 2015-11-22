@@ -1,0 +1,19 @@
+1 " run [arglist]" will start the program with the arguments in [arglist].
+
+2. Enter "break [line #] [conditional expression]".
+
+3. Enter "s" or "n".
+
+4. Enter "s" to step into the function.
+
+5. Enter "c" to continue running the program.
+
+6. Enter "p expr" can show the value of "expr".
+
+7. Enter "undisplay x" will show the value of "x" in 
+   in every step.
+
+8. Enter "info locals" will show the value of all local 
+   variables.
+
+9. Enter "quit" will exit the program.
