@@ -2,7 +2,6 @@ import java.io.IOException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.HashSet;
 
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.conf.Configuration;
@@ -67,16 +66,10 @@ public class DocWordCount {
 
 
             /* MODIFY THE BELOW CODE */
-            HashSet<String> addedWordList = new HashSet<String>();
             Matcher matcher = WORD_PATTERN.matcher(value.toString());
             while (matcher.find()) {
-                if (addedWordList.contains(matcher.group())) continue;
-                else {
-                    addedWordList.add(matcher.group());
-                    word.set(matcher.group());  // matcher.group() return the matched word
-                    context.write(word, ONE);  // emit(word, 1)
-                }
-
+                word.set(matcher.group());
+                context.write(word, ONE);
             }
             /* MODIFY THE ABOVE CODE */
         }

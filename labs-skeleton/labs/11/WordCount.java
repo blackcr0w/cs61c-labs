@@ -2,7 +2,6 @@ import java.io.IOException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.HashSet;
 
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.conf.Configuration;
@@ -18,13 +17,13 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.hadoop.util.GenericOptionsParser;
 
 /**
- * Doc Word count example for Hadoop Map Reduce.
+ * Word count example for Hadoop Map Reduce.
  * 
  * Adapted from the {@link http://wiki.apache.org/hadoop/WordCount Hadoop wiki}.
  */
-public class DocWordCount {
+public class WordCount {
 
-    /** Mapper for doc word count.
+    /** Mapper for word count.
      *
      * The base class Mapper is parameterized by
      * <in key type, in value type, out key type, out value type>.
@@ -43,7 +42,7 @@ public class DocWordCount {
      * interface (called Writable) and, unlike Java's String and Long, are
      * mutable.
      */
-    public static class DocWordCountMap extends Mapper<Text, Text, Text, LongWritable> {
+    public static class WordCountMap extends Mapper<Text, Text, Text, LongWritable> {
         /** Regex pattern to find words (alphanumeric + _). */
         final static Pattern WORD_PATTERN = Pattern.compile("\\w+");
 
@@ -64,25 +63,15 @@ public class DocWordCount {
         @Override
         public void map(Text key, Text value, Context context)
                 throws IOException, InterruptedException {
-
-
-            /* MODIFY THE BELOW CODE */
-            HashSet<String> addedWordList = new HashSet<String>();
             Matcher matcher = WORD_PATTERN.matcher(value.toString());
             while (matcher.find()) {
-                if (addedWordList.contains(matcher.group())) continue;
-                else {
-                    addedWordList.add(matcher.group());
-                    word.set(matcher.group());  // matcher.group() return the matched word
-                    context.write(word, ONE);  // emit(word, 1)
-                }
-
+                word.set(matcher.group());
+                context.write(word, ONE);
             }
-            /* MODIFY THE ABOVE CODE */
         }
     }
 
-    /** Reducer for doc word count.
+    /** Reducer for word count.
      *
      * Like the Mapper base class, the base class Reducer is parameterized by 
      * <in key type, in value type, out key type, out value type>.
@@ -132,10 +121,10 @@ public class DocWordCount {
          * job is to be run across a cluster. Unless the location of code
          * is specified in some other way (e.g. the -libjars command line
          * option), all non-Hadoop code required to run this job must be
-         * contained in the JAR containing the specified class (DocWordCountMap 
+         * contained in the JAR containing the specified class (WordCountMap 
          * in this case).
          */
-        job.setJarByClass(DocWordCountMap.class);
+        job.setJarByClass(WordCountMap.class);
 
         /* Set the datatypes of the keys and values outputted by the maps and reduces.
          * These must agree with the types used by the Mapper and Reducer. Mismatches
@@ -147,7 +136,7 @@ public class DocWordCount {
         job.setOutputValueClass(LongWritable.class);
 
         /* Set the mapper, combiner, reducer to use. These reference the classes defined above. */
-        job.setMapperClass(DocWordCountMap.class);
+        job.setMapperClass(WordCountMap.class);
         job.setReducerClass(SumReduce.class);
     
         /* Set the format to expect input in and write output in. The input files we have

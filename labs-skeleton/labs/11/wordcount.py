@@ -4,7 +4,7 @@ import re
 from pyspark import SparkContext
 
 def flat_map(document):
-    """ Returns back all of the words in LINE """
+    """Returns back all of the words in LINE """
     return re.findall(r"\w+", document[1])
 
 def map(word):

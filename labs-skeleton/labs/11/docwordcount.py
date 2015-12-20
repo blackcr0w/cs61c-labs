@@ -9,15 +9,15 @@ def flat_map(document):
     document ID and document[1] is the contents of the document.
     """
     """ Your code here. """
-    return document[0], re.findall(r"\w+", document[1])
+    return re.findall(r"\w+", document[1])
 
-def map(docID, words):
+def map(arg):
     """ Your code here. """
-    return docID, words.distinct()
+    return (arg, arg)
 
 def reduce(arg1, arg2):
     """ Your code here. """
-    return arg1 + arg2
+    return arg1
 
 def docwordcount(file_name, output="spark-wc-out-docwordcount"):
     sc = SparkContext("local[8]", "DocWordCount")
